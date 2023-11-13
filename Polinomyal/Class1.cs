@@ -41,11 +41,17 @@ namespace Polinom
         {
             _coefficients = new List<double> { 0 };
         }
+        /// <summary>Создает полином от строки данной
+        /// </summary>
+        public Polinomyal(string str)
+        {
+            _coefficients = Polinomyal.Parse(str)._coefficients;
+        }
         /// <summary>
-         /// Конструктор
-         /// создает многочлен, используя список коэффициентов
-         /// </summary>
-         /// <param name="coefficients"></param>
+        /// Конструктор
+        /// создает многочлен, используя список коэффициентов
+        /// </summary>
+        /// <param name="coefficients"></param>
         public Polinomyal(IList<double> coefficients)
         {
             int lastValuable = 0;
@@ -178,7 +184,7 @@ namespace Polinom
         /// </summary>
         /// <param name="q">Делитель</param>
         /// <returns>Частное от деления одного многочлена на другой</returns>
-        public Polinomyal Divide(Polinomyal q)
+        public virtual Polinomyal Divide(Polinomyal q)
         {
             int n = this.MaxPower;
             int m = q.MaxPower;
@@ -694,7 +700,11 @@ namespace Polinom
 
     public class RootedPolinomyal : Polinomyal
     {
+        const double precision = 0.01;
+        public RootedPolinomyal(string str) : base(str)
+        {
 
+        }
         /// <summary>
         /// Конструктор по умолчанию
         /// создает многочлен 0-й степени со свободным членом, равным нулю
@@ -723,18 +733,51 @@ namespace Polinom
             
         }
 
+        public RootedPolinomyal(double num) : base(num) { }
+        /// <summary>
+        /// Деление с остатком текущего многочлена на другой 
+        /// с учетом погрешности
+        /// </summary>
+        /// <param name="q">Делитель</param>
+        /// <returns>Частное от деления одного многочлена на другой</returns>
+        public override RootedPolinomyal Divide(Polinomyal q)
+        {
+            int n = this.MaxPower;
+            int m = q.MaxPower;
+            if (n < m)
+                return new RootedPolinomyal(0);
+
+            double[] numerator = this._coefficients.ToArray();
+            int rev = q.MaxPower;
+            Array.Reverse(numerator);
+            Stack<double> res = new();
+
+            for (int i = 0; i <= n - m; i++)
+            {
+                if (Math.Abs(numerator[i]) < precision)
+                    numerator[i] = 0;
+                double coef = numerator[i] / q[rev - 0];
+                res.Push(coef);
+                for (int j = 0; j <= m; j++)
+                {
+                    numerator[i + j] -= (q[rev - j] * coef);
+                }
+            }
+
+            return new RootedPolinomyal(res);
+        }
         #region КОРНИ ТОЛЬКО ЦЕЛЫЕ И НА [-10000, 10000] И НЕ РАБОТАЕТ
         /// <summary>
         /// Вычисление корней текущего многочлена
         /// </summary>
         /// <returns>Массив, содержащий корни многочлена</returns>
-        public int[] GetRoots()
+        public double[] GetRoots()
         {
-            List<int> res = new();
+            List<double> res = new();
             Polinomyal temp = (Polinomyal)this.Clone();
             while (!temp.IsZero())
             {
-                int root = FindRoot(temp);
+                double root = FindRoot(temp);
                 if (root == -10001)
                     break;
                 res.Add(root);
@@ -752,7 +795,7 @@ namespace Polinom
                 {
                     start = k - 1;
                     end = k + 1;
-                    return FindRoot(p, start, end); ;
+                    return FindRoot(p, start, end); 
                 }
             }
             return -10001;
@@ -761,7 +804,7 @@ namespace Polinom
         public static int FindRoot(Polinomyal p, int start, int end)
         {
             int mid = (start + end) / 2;
-            while (p.CalculateAt(start) - p.CalculateAt(end) >= 0.1)
+            while (p.CalculateAt(start) - p.CalculateAt(end) >= precision)
             {
                 double atMid = p.CalculateAt(mid);
                 if (atMid < 0)
