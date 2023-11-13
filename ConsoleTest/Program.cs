@@ -18,11 +18,17 @@ namespace P
             Polinomyal poli = RootedPolinomyal.ConstructFromRoots(testRoots);
             Console.WriteLine(poli);
 
-            string test3 = "3x^2 - 7x";
+            string test3 = "x^2 + 5x + 6";
             string testRoot = "x - 2,333";
             RootedPolinomyal rootedPolinomyal = new(test3);
             RootedPolinomyal test36 = new(testRoot);
-            Console.WriteLine(rootedPolinomyal / test36);
+            Console.WriteLine("aojfslasdjf;lk");
+            Console.WriteLine(rootedPolinomyal);
+
+            foreach( var root in rootedPolinomyal.GetRoots())
+            {
+                Console.WriteLine(root);
+            }
         }
     }
 }

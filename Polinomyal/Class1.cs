@@ -700,7 +700,8 @@ namespace Polinom
 
     public class RootedPolinomyal : Polinomyal
     {
-        const double precision = 0.01;
+        const double PRECISION = 0.01;
+        static readonly int NUMBERS_AFTER_ZERO = (int)-Math.Log10(PRECISION);
         const int startRootSegment = -10000;
         const int endRootSegment = 10000;
         public RootedPolinomyal(string str) : base(str)
@@ -756,7 +757,7 @@ namespace Polinom
 
             for (int i = 0; i <= n - m; i++)
             {
-                if (Math.Abs(numerator[i]) < precision)
+                if (Math.Abs(numerator[i]) < PRECISION)
                     numerator[i] = 0;
                 double coef = numerator[i] / q[rev - 0];
                 res.Push(coef);
@@ -768,7 +769,6 @@ namespace Polinom
 
             return new RootedPolinomyal(res);
         }
-        #region КОРНИ ТОЛЬКО ЦЕЛЫЕ И НА [-10000, 10000] И НЕ РАБОТАЕТ
         /// <summary>
         /// Вычисление корней текущего многочлена
         /// </summary>
@@ -788,44 +788,38 @@ namespace Polinom
             return res.ToArray();
         }
 
-        public static int FindRoot(Polinomyal p)
+        public static double FindRoot(Polinomyal p)
         {
-            int start = -10000, end = 10000;
-            for (int k = start; k <= end; k++)
-            {
-                if (p.CalculateAt(k - 1) * p.CalculateAt(k + 1) < 0)
-                {
-                    start = k - 1;
-                    end = k + 1;
-                    return FindRoot(p, start, end); 
-                }
-            }
-            return -10001;
+            return Math.Round(
+                ApproximateRoot(p.CalculateAt, 10, PRECISION)
+                , NUMBERS_AFTER_ZERO);
         }
 
-        public static int FindRoot(Polinomyal p, int start, int end)
+        private static double ApproximateRoot(Func<double, double> function
+            , double initialGuess, double tolerance)
         {
-            int mid = (start + end) / 2;
-            while (p.CalculateAt(start) - p.CalculateAt(end) >= precision)
+            double x0 = initialGuess;
+            double x1 = x0 - function(x0) / Derivative(function, x0);
+
+            while (Math.Abs(x1 - x0) > tolerance)
             {
-                double atMid = p.CalculateAt(mid);
-                if (atMid < 0)
-                {
-                    end = mid;
-                }
-                else
-                {
-                    start = mid;
-                }
-                mid = (start + end) / 2;
+                x0 = x1;
+                x1 = x0 - function(x0) / Derivative(function, x0);
             }
-            return mid;
+
+            return x1;
         }
-        #endregion
+
+        private static double Derivative(Func<double, double> function, double x)
+        {
+            double h = 1e-10; // small number for calculating the derivative
+            return (function(x + h) - function(x)) / h;
+        }
+
 
         public double FindExtremePoint()
         {
-            return default;
+            return this.GetRoots().Average() ;
         }
 
         public double ExtremeValue()
