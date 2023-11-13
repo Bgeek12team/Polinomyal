@@ -234,60 +234,7 @@ namespace Polinom
             return (new Polinomyal(numerator)) ;
         }
 
-        #region КОРНИ ТОЛЬКО ЦЕЛЫЕ И НА [-10000, 10000] И НЕ РАБОТАЕТ
-        /// <summary>
-        /// Вычисление корней текущего многочлена
-        /// </summary>
-        /// <returns>Массив, содержащий корни многочлена</returns>
-        public int[] GetRoots()
-        {
-            List<int> res = new();
-            Polinomyal temp = (Polinomyal)this.Clone();
-            while (!temp.IsZero())
-            {
-                int root = FindRoot(temp);
-                if (root == -10001)
-                    break;
-                res.Add(root);
-                temp /= new Polinomyal(new double[] { -root, 1 });
-            }
-            return res.ToArray();
-        }
-
-        public static int FindRoot(Polinomyal p)
-        {
-            int start = -10000, end = 10000;
-            for (int k = start; k <= end; k++)
-            {
-                if (p.CalculateAt(k-1) * p.CalculateAt(k+1) < 0)
-                {
-                    start = k - 1;
-                    end = k + 1;
-                    return FindRoot(p, start, end); ;
-                }
-            }
-            return -10001;
-        }
-
-        public static int FindRoot(Polinomyal p, int start, int end)
-        {
-            int mid = (start + end) / 2;
-            while(p.CalculateAt(start) - p.CalculateAt(end) >= 0.1)
-            {
-                double atMid = p.CalculateAt(mid);
-                if (atMid < 0)
-                {
-                    end = mid;
-                } 
-                else
-                {
-                    start = mid;
-                }
-                mid = (start + end) / 2;
-            }
-            return mid;
-        }
-        #endregion
+        
 
         /// <summary>
         /// Возведение многочлена в степень с помощью алгоритма быстрой экспоненциации
@@ -743,5 +690,107 @@ namespace Polinom
         }
 
 
+    }
+
+    public class RootedPolinomyal : Polinomyal
+    {
+
+        /// <summary>
+        /// Конструктор по умолчанию
+        /// создает многочлен 0-й степени со свободным членом, равным нулю
+        /// </summary>
+        public RootedPolinomyal(): base()
+        {
+            
+        }
+        /// <summary>
+        /// Конструктор
+        /// создает многочлен, используя список коэффициентов
+        /// </summary>
+        /// <param name="coefficients"></param>
+        public RootedPolinomyal(IList<double> coefficients) : base(coefficients)
+        {
+            
+        }
+
+        /// <summary>
+        /// Конструктор
+        /// создает многочлен, используя коллекцию коэффициентов
+        /// </summary>
+        /// <param name="values"></param>
+        public RootedPolinomyal(IEnumerable<double> values) : base(values.ToList())
+        {
+            
+        }
+
+        #region КОРНИ ТОЛЬКО ЦЕЛЫЕ И НА [-10000, 10000] И НЕ РАБОТАЕТ
+        /// <summary>
+        /// Вычисление корней текущего многочлена
+        /// </summary>
+        /// <returns>Массив, содержащий корни многочлена</returns>
+        public int[] GetRoots()
+        {
+            List<int> res = new();
+            Polinomyal temp = (Polinomyal)this.Clone();
+            while (!temp.IsZero())
+            {
+                int root = FindRoot(temp);
+                if (root == -10001)
+                    break;
+                res.Add(root);
+                temp /= new Polinomyal(new double[] { -root, 1 });
+            }
+            return res.ToArray();
+        }
+
+        public static int FindRoot(Polinomyal p)
+        {
+            int start = -10000, end = 10000;
+            for (int k = start; k <= end; k++)
+            {
+                if (p.CalculateAt(k - 1) * p.CalculateAt(k + 1) < 0)
+                {
+                    start = k - 1;
+                    end = k + 1;
+                    return FindRoot(p, start, end); ;
+                }
+            }
+            return -10001;
+        }
+
+        public static int FindRoot(Polinomyal p, int start, int end)
+        {
+            int mid = (start + end) / 2;
+            while (p.CalculateAt(start) - p.CalculateAt(end) >= 0.1)
+            {
+                double atMid = p.CalculateAt(mid);
+                if (atMid < 0)
+                {
+                    end = mid;
+                }
+                else
+                {
+                    start = mid;
+                }
+                mid = (start + end) / 2;
+            }
+            return mid;
+        }
+        #endregion
+
+        public double FindExtremePoint()
+        {
+            return default;
+        }
+
+        public double ExtremeValue()
+        {
+            return this.CalculateAt(this.FindExtremePoint());
+        }
+
+        public static RootedPolinomyal ConstructFromRoots(IList<double> roots)
+        {
+            return default;
+        }
     }
 }
