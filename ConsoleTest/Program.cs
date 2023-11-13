@@ -14,6 +14,10 @@ namespace P
             Console.WriteLine(polinomyal.ToString());
             Console.WriteLine(pp % polinomyal);
 
+            IList<double> testRoots = new List<double> { 1, 1, 1, 1.5 };
+            Polinomyal poli = RootedPolinomyal.ConstructFromRoots(testRoots);
+            Console.WriteLine(poli);
+
             
         }
     }

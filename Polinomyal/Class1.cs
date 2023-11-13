@@ -787,10 +787,19 @@ namespace Polinom
         {
             return this.CalculateAt(this.FindExtremePoint());
         }
-
-        public static RootedPolinomyal ConstructFromRoots(IList<double> roots)
+        /// <summary>
+        /// Воссоздает полином из списка его корней
+        /// </summary>
+        /// <param name="roots">Список корней</param>
+        /// <returns>Полином, корни которого это только корни из данного списка</returns>
+        public static Polinomyal ConstructFromRoots(IList<double> roots)
         {
-            return default;
+            Polinomyal polinomyal = new Polinomyal(1);
+            foreach(var root in roots)
+            {
+                polinomyal *= new Polinomyal(new List<double> { -root, 1});
+            }
+            return polinomyal;
         }
     }
 }
