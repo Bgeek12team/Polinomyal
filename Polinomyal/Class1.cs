@@ -701,6 +701,8 @@ namespace Polinom
     public class RootedPolinomyal : Polinomyal
     {
         const double precision = 0.01;
+        const int startRootSegment = -10000;
+        const int endRootSegment = 10000;
         public RootedPolinomyal(string str) : base(str)
         {
 
