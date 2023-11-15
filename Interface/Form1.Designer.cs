@@ -33,6 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txbx_poli = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.btn_filndRoots = new System.Windows.Forms.Button();
             this.btn_calc = new System.Windows.Forms.Button();
             this.btn_pow = new System.Windows.Forms.Button();
@@ -88,6 +89,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.btn_filndRoots);
             this.groupBox1.Controls.Add(this.btn_calc);
             this.groupBox1.Controls.Add(this.btn_pow);
@@ -100,10 +102,20 @@
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox1.Location = new System.Drawing.Point(15, 107);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(518, 345);
+            this.groupBox1.Size = new System.Drawing.Size(518, 421);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Действия, требующие второе число";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 338);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(508, 36);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Найти точки экстремума";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btn_filndRoots
             // 
@@ -113,7 +125,6 @@
             this.btn_filndRoots.TabIndex = 16;
             this.btn_filndRoots.Text = "Найти корни";
             this.btn_filndRoots.UseVisualStyleBackColor = true;
-            this.btn_filndRoots.Visible = false;
             this.btn_filndRoots.Click += new System.EventHandler(this.btn_filndRoots_Click);
             // 
             // btn_calc
@@ -204,7 +215,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox2.Location = new System.Drawing.Point(539, 107);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(491, 345);
+            this.groupBox2.Size = new System.Drawing.Size(491, 421);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Действия, требующие второй полином";
@@ -279,7 +290,7 @@
             // txbx_res
             // 
             this.txbx_res.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txbx_res.Location = new System.Drawing.Point(128, 458);
+            this.txbx_res.Location = new System.Drawing.Point(131, 534);
             this.txbx_res.Multiline = true;
             this.txbx_res.Name = "txbx_res";
             this.txbx_res.Size = new System.Drawing.Size(902, 106);
@@ -289,7 +300,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(12, 455);
+            this.label4.Location = new System.Drawing.Point(15, 531);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(103, 26);
             this.label4.TabIndex = 12;
@@ -303,7 +314,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 583);
+            this.ClientSize = new System.Drawing.Size(1042, 649);
             this.Controls.Add(this.txbx_res);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox2);
@@ -349,5 +360,6 @@
         private TextBox txbx_res;
         private Label label4;
         private ErrorProvider errorProvider1;
+        private Button button1;
     }
 }
