@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
@@ -794,7 +795,44 @@ namespace Polinom
                 ApproximateRoot(p.CalculateAt, 10, PRECISION)
                 , NUMBERS_AFTER_ZERO);
         }
+        public double Evaluate(double x)
+        {
+            double result = 0;
+            double power = 1;
 
+            foreach (double coefficient in _coefficients)
+            {
+                result += coefficient * power;
+                power *= x;
+            }
+
+            return result;
+        }
+
+        public double[] FindExtremums(double startPoint, double endPoint, double stepSize)
+        {
+            List<double> extremums = new List<double>();
+
+            double currentValue = startPoint;
+
+            double currentValueSign = Math.Sign(Evaluate(currentValue));
+
+            while (currentValue <= endPoint)
+            {
+                double nextValue = currentValue + stepSize;
+                double nextValueSign = Math.Sign(Evaluate(nextValue));
+
+                if (currentValueSign != nextValueSign)
+                {
+                    extremums.Add(currentValue);
+                }
+
+                currentValue = nextValue;
+                currentValueSign = nextValueSign;
+            }
+
+            return extremums.ToArray();
+        }
         private static double ApproximateRoot(Func<double, double> function
             , double initialGuess, double tolerance)
         {
@@ -809,24 +847,23 @@ namespace Polinom
 
             return x1;
         }
+        
 
         private static double Derivative(Func<double, double> function, double x)
         {
             double h = 1e-10; // small number for calculating the derivative
             return (function(x + h) - function(x)) / h;
         }
-
-
         public double[] FindExtremePoint()
         {
-            List<double> result = new List<double>();
-            double[] Roots = this.GetRoots();
+            List<double> values = new List<double>();
+            for (double i = startRootSegment; i < endRootSegment; i += 0.001)
+            { 
+                if (Math.Abs(Derivative(this.CalculateAt, i)) < PRECISION)
+                    values.Add(i);  
+            }
 
-            foreach(double root in Roots)
-                if (this.CalculateAt(root) == 0)
-                    result.Add(root);
-
-            return result.ToArray();
+            return values.ToArray();
         }
 
         public double[] ExtremeValue()
