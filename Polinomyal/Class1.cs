@@ -817,14 +817,25 @@ namespace Polinom
         }
 
 
-        public double FindExtremePoint()
+        public double[] FindExtremePoint()
         {
-            return this.GetRoots().Average() ;
+            List<double> result = new List<double>();
+            double[] Roots = this.GetRoots();
+
+            foreach(double root in Roots)
+                if (this.CalculateAt(root) == 0)
+                    result.Add(root);
+
+            return result.ToArray();
         }
 
-        public double ExtremeValue()
+        public double[] ExtremeValue()
         {
-            return this.CalculateAt(this.FindExtremePoint());
+            List<double> values = new List<double>();
+            double[] extremes = this.FindExtremePoint();
+            foreach(double extreme in extremes)
+                values.Add(this.CalculateAt(extreme));
+            return values.ToArray();
         }
         /// <summary>
         /// Воссоздает полином из списка его корней
