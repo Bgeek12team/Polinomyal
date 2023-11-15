@@ -231,6 +231,25 @@ namespace Interface
             }
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            errorProvider1.Clear();
+            txbx_res.Text = "";
+            try
+            {
+                string[] roots = textBox1.Text.Split(' ');
+                double[] factRoots = new double[roots.Length];
+                for(int i = 0; i < roots.Length; i++)
+                    factRoots[i] = Convert.ToDouble(roots[i]);
+
+                txbx_res.Text = RootedPolinomyal.ConstructFromRoots(factRoots).ToString();
+            }
+            catch
+            {
+                errorProvider1.SetError(btn_filndRoots, "Парсинг невозможен");
+            }
+        }
+
         private void groupBox2_Enter(object sender, EventArgs e)
         {
 

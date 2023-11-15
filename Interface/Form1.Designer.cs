@@ -54,6 +54,9 @@
             this.txbx_res = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.button2 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -205,6 +208,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.btn_modP);
             this.groupBox2.Controls.Add(this.btn_divP);
             this.groupBox2.Controls.Add(this.btn_mulP);
@@ -293,7 +299,7 @@
             this.txbx_res.Location = new System.Drawing.Point(131, 534);
             this.txbx_res.Multiline = true;
             this.txbx_res.Name = "txbx_res";
-            this.txbx_res.Size = new System.Drawing.Size(902, 106);
+            this.txbx_res.Size = new System.Drawing.Size(899, 106);
             this.txbx_res.TabIndex = 13;
             // 
             // label4
@@ -309,6 +315,32 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(0, 338);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(479, 36);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "Построить полином по корням";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 293);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(479, 34);
+            this.textBox1.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 264);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(289, 26);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Введите корни через пробел";
             // 
             // Form1
             // 
@@ -361,5 +393,8 @@
         private Label label4;
         private ErrorProvider errorProvider1;
         private Button button1;
+        private Button button2;
+        private TextBox textBox1;
+        private Label label6;
     }
 }
