@@ -33,6 +33,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.txbx_poli = new System.Windows.Forms.TextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.btn_filndRoots = new System.Windows.Forms.Button();
             this.btn_calc = new System.Windows.Forms.Button();
             this.btn_pow = new System.Windows.Forms.Button();
@@ -53,6 +54,9 @@
             this.txbx_res = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.button2 = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
@@ -88,6 +92,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.btn_filndRoots);
             this.groupBox1.Controls.Add(this.btn_calc);
             this.groupBox1.Controls.Add(this.btn_pow);
@@ -100,10 +105,20 @@
             this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox1.Location = new System.Drawing.Point(15, 107);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(518, 345);
+            this.groupBox1.Size = new System.Drawing.Size(518, 421);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Действия, требующие второе число";
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 338);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(508, 36);
+            this.button1.TabIndex = 17;
+            this.button1.Text = "Найти точки экстремума";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // btn_filndRoots
             // 
@@ -113,7 +128,6 @@
             this.btn_filndRoots.TabIndex = 16;
             this.btn_filndRoots.Text = "Найти корни";
             this.btn_filndRoots.UseVisualStyleBackColor = true;
-            this.btn_filndRoots.Visible = false;
             this.btn_filndRoots.Click += new System.EventHandler(this.btn_filndRoots_Click);
             // 
             // btn_calc
@@ -194,6 +208,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.button2);
+            this.groupBox2.Controls.Add(this.textBox1);
+            this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.btn_modP);
             this.groupBox2.Controls.Add(this.btn_divP);
             this.groupBox2.Controls.Add(this.btn_mulP);
@@ -204,7 +221,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.groupBox2.Location = new System.Drawing.Point(539, 107);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(491, 345);
+            this.groupBox2.Size = new System.Drawing.Size(491, 421);
             this.groupBox2.TabIndex = 4;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Действия, требующие второй полином";
@@ -279,17 +296,17 @@
             // txbx_res
             // 
             this.txbx_res.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.txbx_res.Location = new System.Drawing.Point(128, 458);
+            this.txbx_res.Location = new System.Drawing.Point(131, 534);
             this.txbx_res.Multiline = true;
             this.txbx_res.Name = "txbx_res";
-            this.txbx_res.Size = new System.Drawing.Size(902, 106);
+            this.txbx_res.Size = new System.Drawing.Size(899, 106);
             this.txbx_res.TabIndex = 13;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Times New Roman", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label4.Location = new System.Drawing.Point(12, 455);
+            this.label4.Location = new System.Drawing.Point(15, 531);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(103, 26);
             this.label4.TabIndex = 12;
@@ -299,11 +316,37 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(0, 338);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(479, 36);
+            this.button2.TabIndex = 12;
+            this.button2.Text = "Построить полином по корням";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(6, 293);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(479, 34);
+            this.textBox1.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(6, 264);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(289, 26);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Введите корни через пробел";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1042, 583);
+            this.ClientSize = new System.Drawing.Size(1042, 649);
             this.Controls.Add(this.txbx_res);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.groupBox2);
@@ -349,5 +392,9 @@
         private TextBox txbx_res;
         private Label label4;
         private ErrorProvider errorProvider1;
+        private Button button1;
+        private Button button2;
+        private TextBox textBox1;
+        private Label label6;
     }
 }

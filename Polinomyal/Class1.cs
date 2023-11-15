@@ -1,13 +1,14 @@
 ﻿using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace Polinom
 {
-    
-    public class Polinomyal : 
+
+    public class Polinomyal :
         IEquatable<Polinomyal>, ICloneable
-        //,ICollection<Polinomyal>, IEnumerable<Polinomyal>;
+    //,ICollection<Polinomyal>, IEnumerable<Polinomyal>;
 
     {
         /// <summary>
@@ -41,11 +42,17 @@ namespace Polinom
         {
             _coefficients = new List<double> { 0 };
         }
+        /// <summary>Создает полином от строки данной
+        /// </summary>
+        public Polinomyal(string str)
+        {
+            _coefficients = Polinomyal.Parse(str)._coefficients;
+        }
         /// <summary>
-         /// Конструктор
-         /// создает многочлен, используя список коэффициентов
-         /// </summary>
-         /// <param name="coefficients"></param>
+        /// Конструктор
+        /// создает многочлен, используя список коэффициентов
+        /// </summary>
+        /// <param name="coefficients"></param>
         public Polinomyal(IList<double> coefficients)
         {
             int lastValuable = 0;
@@ -97,9 +104,9 @@ namespace Polinom
         /// <returns></returns>
         public double CalculateAt(double x)
         {
-            double res = 0; 
+            double res = 0;
             for (int i = MaxPower; i >= 0; i--)
-                res = res * x + _coefficients[i]; 
+                res = res * x + _coefficients[i];
             return res;
         }
         /// <summary>
@@ -163,7 +170,7 @@ namespace Polinom
         /// <returns>Результат произведения двух многочленов</returns>
         public Polinomyal Multiply(Polinomyal other)
         {
-            double[] coefs = new double[this.MaxPower + other.MaxPower + 2]; 
+            double[] coefs = new double[this.MaxPower + other.MaxPower + 2];
             for (int i = 0; i <= this.MaxPower; i++)
             {
                 for (int j = 0; j <= other.MaxPower; j++)
@@ -178,7 +185,7 @@ namespace Polinom
         /// </summary>
         /// <param name="q">Делитель</param>
         /// <returns>Частное от деления одного многочлена на другой</returns>
-        public Polinomyal Divide(Polinomyal q)
+        public virtual Polinomyal Divide(Polinomyal q)
         {
             int n = this.MaxPower;
             int m = q.MaxPower;
@@ -192,7 +199,7 @@ namespace Polinom
             Array.Reverse(numerator);
             Stack<double> res = new();
 
-            for (int i = 0; i <= n-m; i++)
+            for (int i = 0; i <= n - m; i++)
             {
                 double coef = numerator[i] / denominator[0];
                 res.Push(coef);
@@ -231,10 +238,10 @@ namespace Polinom
                 }
             }
             Array.Reverse(numerator);
-            return (new Polinomyal(numerator)) ;
+            return (new Polinomyal(numerator));
         }
 
-        
+
 
         /// <summary>
         /// Возведение многочлена в степень с помощью алгоритма быстрой экспоненциации
@@ -438,17 +445,17 @@ namespace Polinom
 
             for (int i = _coefficients.Count - 1; i >= 0; i--)
             {
-                
+
                 if (_coefficients[i] == 0)
                     continue;
 
-                
+
                 string sgn = _coefficients[i] > 0 ? "+" : "-";
                 if (result == "" && sgn == "+")
                     sgn = "";
 
                 string val = Math.Abs(_coefficients[i]).ToString();
-                if (Math.Abs(_coefficients[i]) == 1 && i!=0)
+                if (Math.Abs(_coefficients[i]) == 1 && i != 0)
                 {
                     val = "";
                 }
@@ -461,7 +468,8 @@ namespace Polinom
                 if (i == 1)
                 {
                     pow = "";
-                } else
+                }
+                else
                 {
                     pow = "^" + i.ToString();
                 }
@@ -559,29 +567,21 @@ namespace Polinom
         /// <returns>Экземпляр класса Polinomyal, преобразованный из строки</returns>
         public static Polinomyal Parse(string s)
         {
-            //string[] buf = s.Split(' ');
-            //List<double> list = new();
-            //for (int i = 0; i < buf.Length; i++)
-            //{
-            //    list.Add(double.Parse(buf[i]));
-            //}
-            //return new Polinomyal(list);
-
             string[] values = GetBuffered(s);
             Dictionary<int, double> powsCoefs = new();
-            powsCoefs.Add(ParsePart(values[0]).Item1, 
+            powsCoefs.Add(ParsePart(values[0]).Item1,
                 ParsePart(values[0]).Item2);
-            for (int i = 1; i < values.Length;i ++)
+            for (int i = 1; i < values.Length; i++)
             {
-                if (values[i-1] == "-")
+                if (values[i - 1] == "-")
                 {
-                    powsCoefs.Add(ParsePart(values[i]).Item1, 
+                    powsCoefs.Add(ParsePart(values[i]).Item1,
                         -ParsePart(values[i]).Item2);
 
-                } 
-                else if (values[i-1] == "+")
+                }
+                else if (values[i - 1] == "+")
                 {
-                    powsCoefs.Add(ParsePart(values[i]).Item1, 
+                    powsCoefs.Add(ParsePart(values[i]).Item1,
                         ParsePart(values[i]).Item2);
                 }
             }
@@ -597,7 +597,7 @@ namespace Polinom
         }
 
         //5x^3, 5x^3, x^3, x^3, x, x, 6, 6, 5x
-        private static (int, double) ParsePart(string part)
+        protected static (int, double) ParsePart(string part)
         {
             int pow;
             double coef;
@@ -614,7 +614,7 @@ namespace Polinom
                 {
                     coef = 1;
                 }
-                else if (buf[0] == "-") 
+                else if (buf[0] == "-")
                 {
                     coef = 1;
                 }
@@ -622,7 +622,8 @@ namespace Polinom
                 {
                     coef = Convert.ToDouble(buf[0]);
                 }
-            } else
+            }
+            else
             {
                 if (buf[0] == "")
                 {
@@ -644,7 +645,7 @@ namespace Polinom
             return (pow, coef);
         }
 
-        private static string[] GetBuffered(string s)
+        protected static string[] GetBuffered(string s)
         {
             s = s.Trim().ToLower();
             StringBuilder sb = new();
@@ -673,7 +674,7 @@ namespace Polinom
             for (int i = 0; i < sb.Length; i++)
             {
                 char c = sb[i];
-                if ( (c == '-' || c == '+') )
+                if ((c == '-' || c == '+'))
                 {
                     if (sb[i - 1] != '@')
                     {
@@ -694,14 +695,21 @@ namespace Polinom
 
     public class RootedPolinomyal : Polinomyal
     {
+        const double PRECISION = 0.01;
+        static readonly int NUMBERS_AFTER_ZERO = (int)-Math.Log10(PRECISION);
+        const int startRootSegment = -10000;
+        const int endRootSegment = 10000;
+        public RootedPolinomyal(string str) : base(str)
+        {
 
+        }
         /// <summary>
         /// Конструктор по умолчанию
         /// создает многочлен 0-й степени со свободным членом, равным нулю
         /// </summary>
-        public RootedPolinomyal(): base()
+        public RootedPolinomyal() : base()
         {
-            
+
         }
         /// <summary>
         /// Конструктор
@@ -710,7 +718,7 @@ namespace Polinom
         /// <param name="coefficients"></param>
         public RootedPolinomyal(IList<double> coefficients) : base(coefficients)
         {
-            
+
         }
 
         /// <summary>
@@ -720,22 +728,54 @@ namespace Polinom
         /// <param name="values"></param>
         public RootedPolinomyal(IEnumerable<double> values) : base(values.ToList())
         {
-            
+
         }
 
-        #region КОРНИ ТОЛЬКО ЦЕЛЫЕ И НА [-10000, 10000] И НЕ РАБОТАЕТ
+        public RootedPolinomyal(double num) : base(num) { }
+        /// <summary>
+        /// Деление с остатком текущего многочлена на другой 
+        /// с учетом погрешности
+        /// </summary>
+        /// <param name="q">Делитель</param>
+        /// <returns>Частное от деления одного многочлена на другой</returns>
+        public override RootedPolinomyal Divide(Polinomyal q)
+        {
+            int n = this.MaxPower;
+            int m = q.MaxPower;
+            if (n < m)
+                return new RootedPolinomyal(0);
+
+            double[] numerator = this._coefficients.ToArray();
+            int rev = q.MaxPower;
+            Array.Reverse(numerator);
+            Stack<double> res = new();
+
+            for (int i = 0; i <= n - m; i++)
+            {
+                if (Math.Abs(numerator[i]) < PRECISION)
+                    numerator[i] = 0;
+                double coef = numerator[i] / q[rev - 0];
+                res.Push(coef);
+                for (int j = 0; j <= m; j++)
+                {
+                    numerator[i + j] -= (q[rev - j] * coef);
+                }
+            }
+
+            return new RootedPolinomyal(res);
+        }
         /// <summary>
         /// Вычисление корней текущего многочлена
         /// </summary>
         /// <returns>Массив, содержащий корни многочлена</returns>
-        public int[] GetRoots()
+        public double[] GetRoots()
         {
-            List<int> res = new();
+            List<double> res = new();
             Polinomyal temp = (Polinomyal)this.Clone();
             while (!temp.IsZero())
             {
-                int root = FindRoot(temp);
-                if (root == -10001)
+                double root = FindRoot(temp);
+                if (root == -10001 || double.IsNaN(root))
                     break;
                 res.Add(root);
                 temp /= new Polinomyal(new double[] { -root, 1 });
@@ -743,54 +783,109 @@ namespace Polinom
             return res.ToArray();
         }
 
-        public static int FindRoot(Polinomyal p)
+        public static double FindRoot(Polinomyal p)
         {
-            int start = -10000, end = 10000;
-            for (int k = start; k <= end; k++)
+            return Math.Round(
+                ApproximateRoot(p.CalculateAt, 10, PRECISION)
+                , NUMBERS_AFTER_ZERO);
+        }
+
+        private static double ApproximateRoot(Func<double, double> function
+            , double initialGuess, double tolerance)
+        {
+            double x0 = initialGuess;
+            double x1 = x0 - function(x0) / Derivative(function, x0);
+            int cycles = 100000;
+            while (Math.Abs(x1 - x0) > tolerance)
             {
-                if (p.CalculateAt(k - 1) * p.CalculateAt(k + 1) < 0)
+                cycles--;
+                x0 = x1;
+                x1 = x0 - function(x0) / Derivative(function, x0);
+                if (cycles == 0)
+                    return -10001;
+            }
+
+            return x1;
+        }
+
+
+        private static double Derivative(Func<double, double> function, double x)
+        {
+            double h = 1e-10; // small number for calculating the derivative
+            return (function(x + h) - function(x)) / h;
+        }
+
+
+
+        public double[] FindExtremePoint()
+        {
+            List<double> values = new List<double>();
+            for (double i = startRootSegment; i < endRootSegment; i += 0.001)
+            {
+                if (Math.Abs(Derivative(this.CalculateAt, i)) < PRECISION)
                 {
-                    start = k - 1;
-                    end = k + 1;
-                    return FindRoot(p, start, end); ;
+                    values.Add(i);
+                    i += 1;
                 }
             }
-            return -10001;
+
+            return values.ToArray();
         }
 
-        public static int FindRoot(Polinomyal p, int start, int end)
+
+        public double[] ExtremeValue()
         {
-            int mid = (start + end) / 2;
-            while (p.CalculateAt(start) - p.CalculateAt(end) >= 0.1)
+            List<double> res = new();
+            foreach (var exP in FindExtremePoint())
             {
-                double atMid = p.CalculateAt(mid);
-                if (atMid < 0)
-                {
-                    end = mid;
-                }
-                else
-                {
-                    start = mid;
-                }
-                mid = (start + end) / 2;
+                res.Add(CalculateAt(exP));
             }
-            return mid;
+            return res.ToArray();
         }
-        #endregion
-
-        public double FindExtremePoint()
+        /// <summary>
+        /// Воссоздает полином из списка его корней
+        /// </summary>
+        /// <param name="roots">Список корней</param>
+        /// <returns>Полином, корни которого это только корни из данного списка</returns>
+        public static Polinomyal ConstructFromRoots(IList<double> roots)
         {
-            return default;
+            Polinomyal polinomyal = new Polinomyal(1);
+            foreach (var root in roots)
+            {
+                polinomyal *= new Polinomyal(new List<double> { -root, 1 });
+            }
+            return polinomyal;
         }
 
-        public double ExtremeValue()
+        public static new RootedPolinomyal Parse(string s)
         {
-            return this.CalculateAt(this.FindExtremePoint());
-        }
+            string[] values = GetBuffered(s);
+            Dictionary<int, double> powsCoefs = new();
+            powsCoefs.Add(ParsePart(values[0]).Item1,
+                ParsePart(values[0]).Item2);
+            for (int i = 1; i < values.Length; i++)
+            {
+                if (values[i - 1] == "-")
+                {
+                    powsCoefs.Add(ParsePart(values[i]).Item1,
+                        -ParsePart(values[i]).Item2);
 
-        public static RootedPolinomyal ConstructFromRoots(IList<double> roots)
-        {
-            return default;
+                }
+                else if (values[i - 1] == "+")
+                {
+                    powsCoefs.Add(ParsePart(values[i]).Item1,
+                        ParsePart(values[i]).Item2);
+                }
+            }
+
+            double[] value = new double[powsCoefs.Keys.Max() + 1];
+            for (int i = 0; i < value.Length; i++)
+            {
+                powsCoefs.TryGetValue(i, out value[i]);
+            }
+
+            return new RootedPolinomyal(value);
+
         }
     }
 }

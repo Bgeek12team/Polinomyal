@@ -3,7 +3,7 @@ namespace Interface
 {
     public partial class Form1 : Form
     {
-        Polinomyal cur, other;
+        RootedPolinomyal cur, other;
         double constant;
         string res;
         public Form1()
@@ -16,8 +16,8 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
-                other = Polinomyal.Parse(txbx_otherPoli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
+                other = RootedPolinomyal.Parse(txbx_otherPoli.Text);
                 txbx_res.Text = (cur + other).ToString();
             }
             catch
@@ -31,8 +31,8 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
-                other = Polinomyal.Parse(txbx_otherPoli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
+                other = RootedPolinomyal.Parse(txbx_otherPoli.Text);
 
                 txbx_res.Text = (cur - other).ToString();
             }
@@ -47,8 +47,8 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
-                other = Polinomyal.Parse(txbx_otherPoli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
+                other = RootedPolinomyal.Parse(txbx_otherPoli.Text);
 
                 txbx_res.Text = (cur * other).ToString();
             }
@@ -63,8 +63,8 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
-                other = Polinomyal.Parse(txbx_otherPoli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
+                other = RootedPolinomyal.Parse(txbx_otherPoli.Text);
 
                 txbx_res.Text = (cur / other).ToString();
             }
@@ -79,8 +79,8 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
-                other = Polinomyal.Parse(txbx_otherPoli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
+                other = RootedPolinomyal.Parse(txbx_otherPoli.Text);
 
                 Polinomyal res = cur % other;
                 if (!res.IsZero())
@@ -103,7 +103,7 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
                 constant = double.Parse(txbx_c.Text);
 
                 txbx_res.Text = (cur + constant).ToString();
@@ -119,7 +119,7 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
                 constant = double.Parse(txbx_c.Text);
 
                 txbx_res.Text = (cur - constant).ToString();
@@ -135,7 +135,7 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
                 constant = double.Parse(txbx_c.Text);
 
                 txbx_res.Text = (cur * constant).ToString();
@@ -151,7 +151,7 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
                 constant = double.Parse(txbx_c.Text);
 
                 txbx_res.Text = (cur / constant).ToString();
@@ -167,7 +167,7 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
                 constant = int.Parse(txbx_c.Text);
 
                 txbx_res.Text = (cur.Pow((int)constant)).ToString();
@@ -183,7 +183,7 @@ namespace Interface
             errorProvider1.Clear();
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
                 constant = double.Parse(txbx_c.Text);
 
                 double res = cur.CalculateAt(constant);
@@ -201,11 +201,48 @@ namespace Interface
             txbx_res.Text = "";
             try
             {
-                cur = Polinomyal.Parse(txbx_poli.Text);
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
 
-                int[] roots = cur.GetRoots();
+                double[] roots = cur.GetRoots();
                 for (int i = 0; i < roots.Length; i++)
                     txbx_res.Text += (roots[i] + " ");
+            }
+            catch
+            {
+                errorProvider1.SetError(btn_filndRoots, "Парсинг невозможен");
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            errorProvider1.Clear();
+            txbx_res.Text = "";
+            try
+            {
+                cur = RootedPolinomyal.Parse(txbx_poli.Text);
+
+                double[] roots = cur.FindExtremePoint();
+                for (int i = 0; i < roots.Length; i++)
+                    txbx_res.Text += (roots[i] + " ");
+            }
+            catch
+            {
+                errorProvider1.SetError(btn_filndRoots, "Парсинг невозможен");
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            errorProvider1.Clear();
+            txbx_res.Text = "";
+            try
+            {
+                string[] roots = textBox1.Text.Split(' ');
+                double[] factRoots = new double[roots.Length];
+                for(int i = 0; i < roots.Length; i++)
+                    factRoots[i] = Convert.ToDouble(roots[i]);
+
+                txbx_res.Text = RootedPolinomyal.ConstructFromRoots(factRoots).ToString();
             }
             catch
             {
