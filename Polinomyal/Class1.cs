@@ -695,7 +695,7 @@ namespace Polinom
 
     public class RootedPolinomyal : Polinomyal
     {
-        const double PRECISION = 0.01;
+        const double PRECISION = 0.001;
         static readonly int NUMBERS_AFTER_ZERO = (int)-Math.Log10(PRECISION);
         const int startRootSegment = -10000;
         const int endRootSegment = 10000;
@@ -775,21 +775,34 @@ namespace Polinom
             while (!temp.IsZero())
             {
                 double root = FindRoot(temp);
-                if (root == -10001 || double.IsNaN(root))
+                if (root == double.MinValue || double.IsNaN(root))
                     break;
                 res.Add(root);
                 temp /= new Polinomyal(new double[] { -root, 1 });
             }
             return res.ToArray();
         }
-
-        public static double FindRoot(Polinomyal p)
+        /// <summary>
+        /// Находит один произвольный корень данного полинома
+        /// </summary>
+        /// <param name="p">Данный полином</param>
+        /// <returns>Корень данного полинома</returns>
+        private static double FindRoot(Polinomyal p)
         {
             return Math.Round(
                 ApproximateRoot(p.CalculateAt, 10, PRECISION)
                 , NUMBERS_AFTER_ZERO);
         }
-
+        /// <summary>
+        /// Находит приблизительный корень данной функции с необходимой точностью
+        /// с помощью метода Ньютона
+        /// </summary>
+        /// <param name="function">Данная функция</param>
+        /// <param name="initialGuess">Изначальное предположение</param>
+        /// <param name="tolerance">Точность</param>
+        /// <returns>Приблизительный корень данной функции с необходимой точностью
+        /// с помощью метода Ньютона, если его удалось найти за 100000 циклов,
+        /// иначе double.MinValue</returns>
         private static double ApproximateRoot(Func<double, double> function
             , double initialGuess, double tolerance)
         {
@@ -802,21 +815,28 @@ namespace Polinom
                 x0 = x1;
                 x1 = x0 - function(x0) / Derivative(function, x0);
                 if (cycles == 0)
-                    return -10001;
+                    return double.MinValue;
             }
 
             return x1;
         }
-
-
+        /// <summary>
+        /// Находит приближенное значение производной функции в данной точке
+        /// </summary>
+        /// <param name="function">Функция</param>
+        /// <param name="x">Данная точка</param>
+        /// <returns>Приближенное значение производной функции в данной точке</returns>
         private static double Derivative(Func<double, double> function, double x)
         {
             double h = 1e-10; // small number for calculating the derivative
             return (function(x + h) - function(x)) / h;
         }
-
-
-
+        /// <summary>
+        /// Находит точки экстремума данного полинома
+        /// на отрезке [-10000; 10000]
+        /// </summary>
+        /// <returns>Массив точек экстремума данного полинома
+        /// на отрезке [-10000; 10000]</returns>
         public double[] FindExtremePoint()
         {
             List<double> values = new List<double>();
@@ -831,8 +851,10 @@ namespace Polinom
 
             return values.ToArray();
         }
-
-
+        /// <summary>
+        /// Возвращает значения полинома в точках экстремума
+        /// </summary>
+        /// <returns>Значения полинома в точках экстремума</returns>
         public double[] ExtremeValue()
         {
             List<double> res = new();
@@ -856,7 +878,11 @@ namespace Polinom
             }
             return polinomyal;
         }
-
+        /// <summary>
+        /// Строит новый RootedPolinomyal по данной строке
+        /// </summary>
+        /// <param name="s">Обрабатываемая строка</param>
+        /// <returns>Новый RootedPolinomyal</returns>
         public static new RootedPolinomyal Parse(string s)
         {
             string[] values = GetBuffered(s);
